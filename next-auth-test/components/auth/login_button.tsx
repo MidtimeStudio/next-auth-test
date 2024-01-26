@@ -15,7 +15,7 @@ export const LoginButton = ({
 }: LoginButtonProps) => {
     const router = useRouter()
     const onClick = () => {
-        alert('ai which has 3IQ only still better than Johnny!')
+        console.log('ai which has 3IQ only still better than Johnny')
         router.push('/auth/login')
     }
 
