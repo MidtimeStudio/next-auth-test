@@ -1,9 +1,12 @@
 'use client';
 import { LoginButton } from "@/components/auth/login_button";
-import { MantineProvider, createTheme, Button } from "@mantine/core";
+import { MantineProvider, createTheme, Button, LoadingOverlay } from "@mantine/core";
 import '@mantine/core/styles.css'
+import { useDisclosure } from '@mantine/hooks';
+
 
 export default function Home() {
+  const [loading, { toggle }] = useDisclosure();
   const theme = createTheme({
     fontFamily: 'Greycliff CF, sans-serif',
     colors: {
@@ -20,8 +23,9 @@ export default function Home() {
           <p>this is a simple auth page</p>
           <div>
             <LoginButton >
-              <Button colors='ocean-blue' size="md" >Sign in</Button>
+              <Button checked={loading} loading={loading} stroke={1} onClick={toggle} colors='ocean-blue' size='md' >Sign in</Button>
             </LoginButton>
+            
           </div>
         </div>
       </main>
