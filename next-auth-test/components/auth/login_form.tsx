@@ -13,6 +13,7 @@ import * as z from "zod";
 //import { LoginSchema } from "@/schemas"
 import { zodResolver } from 'mantine-form-zod-resolver';
 import { FormError } from "@/components/form_error"
+import { FormSuccess } from "@/components/form_success"
 
 export const LoginForm = () => {
   const schema = z.object({
@@ -45,8 +46,9 @@ export const LoginForm = () => {
         <CardWrapper headerLabel="Welcome to the page!" backButtonLabel="Don't have an account?" backButtonHref="/auth/register" showSocial>
           <form onSubmit={form.onSubmit((value) => console.log(value))}>
             <TextInput label='Email' placeholder="Email" withAsterisk leftSection={<IconAt size={16} />} {...form.getInputProps('email')} radius='md' />
-            <PasswordInput label="Password" radius='md' withAsterisk placeholder='Password' leftSection={icon} {...form.getInputProps('password')} />
-            <FormError message="test"/>
+            <PasswordInput mt='sm' label="Password" radius='md' withAsterisk placeholder='Password' leftSection={icon} {...form.getInputProps('password')} />
+            {<FormError message="Something went wrong!"/>}
+            {<FormSuccess message="Email sent!"/>}
             <Button variant="light" mt='md' type="submit" fullWidth>Submit</Button>
           </form>
         </CardWrapper>
