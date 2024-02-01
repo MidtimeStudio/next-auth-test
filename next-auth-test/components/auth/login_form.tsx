@@ -1,43 +1,55 @@
 'use client'
-import { Button, TextInput, PasswordInput } from "@mantine/core"
+import { Button, TextInput, PasswordInput, rem } from "@mantine/core"
 import { MantineProvider } from "@mantine/core"
 import '@mantine/core/styles.css'
 import { CardWrapper } from "./card_wrapper"
 import { IconAt } from '@tabler/icons-react';
 import { useForm } from '@mantine/form';
-import { useDisclosure } from '@mantine/hooks';
-
+//import { useDisclosure } from '@mantine/hooks';
+import { IconLock } from '@tabler/icons-react';
+//import { useForm } from 'react-hook-form'
+//import { zodResolver } from "@hookform/resolvers/zod";
+import * as z from "zod";
+//import { LoginSchema } from "@/schemas"
+import { zodResolver } from 'mantine-form-zod-resolver';
+import { FormError } from "@/components/form_error"
 
 export const LoginForm = () => {
+  const schema = z.object({
+    email: z.string().email({ message: 'Email is required!' }),
+    password: z.string().min(1, { message: 'Password is required!' })
+  })
   //const [visible, { toggle }] = useDisclosure(false);
+  const icon = <IconLock style={{ width: rem(18), height: rem(18) }} stroke={1.5} />
   const form = useForm({
     initialValues: {
       email: '',
-      termsOfService: false,
+      //termsOfService: false,
       password: ''
     },
-    validate: {
+    validate: zodResolver(schema),
+    /*initialErrors: {
+      //name: <p>Paragraph error</p>, // -> error as a react element
+      //email: 'Invalid email!', // -> error as a number
+      email: null
+    },*/
+    /*validate: {
       email: (value) => (/^\S+@\S+$/.test(value) ? null : 'Invalid email!'),
-      password: (value_1) => (/^\S+@\S+$/.test(value_1) ? null : 'Invalid password!'),
-    },
+      password: (value) => (/^\S+@\S+$/.test(value) ? null : 'iiii'),
+    },*/
   });
+
   return (
     <div >
       <MantineProvider>
-
-      <CardWrapper headerLabel="Welcome to the page!" backButtonLabel="Don't have an account?" backButtonHref="/auth/register" showSocial>
-        
-        <form className='' onSubmit={form.onSubmit((values) => console.log(values))}>
-          <TextInput label='Email' placeholder="Email" withAsterisk leftSection={<IconAt size={16} />} {...form.getInputProps('email')} radius='md' />
-        </form>
-        <form onSubmit={form.onSubmit((value_1) => console.log(value_1))}>
-          <PasswordInput label="Password" radius='md' withAsterisk placeholder='Password' {...form.getInputProps('password')}/>
-          <Button variant="light" mt='md' type="submit" fullWidth>Submit</Button>
-        </form>
-        
-
-       
-      </CardWrapper>
+        <CardWrapper headerLabel="Welcome to the page!" backButtonLabel="Don't have an account?" backButtonHref="/auth/register" showSocial>
+          <form onSubmit={form.onSubmit((value) => console.log(value))}>
+            <TextInput label='Email' placeholder="Email" withAsterisk leftSection={<IconAt size={16} />} {...form.getInputProps('email')} radius='md' />
+            <PasswordInput label="Password" radius='md' withAsterisk placeholder='Password' leftSection={icon} {...form.getInputProps('password')} />
+            <FormError message="test"/>
+            <Button variant="light" mt='md' type="submit" fullWidth>Submit</Button>
+          </form>
+        </CardWrapper>
       </MantineProvider>
     </div>
   )
