@@ -1,5 +1,5 @@
 'use client'
-import { Button, TextInput, PasswordInput, rem } from "@mantine/core"
+import { Button, TextInput, PasswordInput, rem, Alert } from "@mantine/core"
 import { MantineProvider } from "@mantine/core"
 import '@mantine/core/styles.css'
 import { CardWrapper } from "./card_wrapper"
@@ -14,8 +14,34 @@ import * as z from "zod";
 import { zodResolver } from 'mantine-form-zod-resolver';
 import { FormError } from "@/components/form_error"
 import { FormSuccess } from "@/components/form_success"
+import { login } from "@/actions/login"
+import { useState, useTransition } from "react"
 
 export const LoginForm = () => {
+  const [loginError, setLoginError] = useState<string | undefined>(undefined);
+  const [loginSuccess, setLoginSuccess] = useState<string | undefined>(undefined);
+  const [isPending, startTransition] = useTransition()
+  const handleLogin = async (values: any) => {
+    try {
+      // Perform your login logic here
+      // Example: const loginResult = await login(values);
+      // Assuming login function returns a success message on successful login
+//
+      // Simulating login success
+      setLoginSuccess('Email sent!');
+      setLoginError(undefined); // Set to undefined instead of null
+    } catch (error) {
+      // Handle login error
+      // Example: setLoginError('Invalid credentials');
+      setLoginError('Invalid credentials');
+      setLoginSuccess(undefined); // Set to undefined instead of null
+    } finally {
+      // End transition regardless of success or error
+      startTransition(() => {
+        login(values)
+      });
+    }
+  };
   const schema = z.object({
     email: z.string().email({ message: 'Email is required!' }),
     password: z.string().min(1, { message: 'Password is required!' })
@@ -39,17 +65,16 @@ export const LoginForm = () => {
       password: (value) => (/^\S+@\S+$/.test(value) ? null : 'iiii'),
     },*/
   });
-
   return (
     <div >
       <MantineProvider>
         <CardWrapper headerLabel="Welcome to the page!" backButtonLabel="Don't have an account?" backButtonHref="/auth/register" showSocial>
-          <form onSubmit={form.onSubmit((value) => console.log(value))}>
-            <TextInput label='Email' placeholder="Email" withAsterisk leftSection={<IconAt size={16} />} {...form.getInputProps('email')} radius='md' />
-            <PasswordInput mt='sm' label="Password" radius='md' withAsterisk placeholder='Password' leftSection={icon} {...form.getInputProps('password')} />
-            {<FormError message="Something went wrong!"/>}
-            {<FormSuccess message="Email sent!"/>}
-            <Button variant="light" mt='md' type="submit" fullWidth>Submit</Button>
+          <form onSubmit={form.onSubmit(handleLogin)}>
+            <TextInput disabled={isPending} label='Email' placeholder="Type your email" withAsterisk leftSection={<IconAt size={16} />} {...form.getInputProps('email')} radius='md' />
+            <PasswordInput disabled={isPending} mt='sm' label="Password" radius='md' withAsterisk placeholder='Type your password' leftSection={icon} {...form.getInputProps('password')} />
+            {<FormError message={loginError}/>}
+            {<FormSuccess message={loginSuccess}/>}
+            <Button disabled={isPending} variant="light" mt='md' type="submit" fullWidth>Submit</Button>
           </form>
         </CardWrapper>
       </MantineProvider>
@@ -58,3 +83,5 @@ export const LoginForm = () => {
 }
 
 export default LoginForm
+  
+  
