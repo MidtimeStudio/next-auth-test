@@ -1,5 +1,5 @@
 'use server'
 
-export const login = (測試: any) => {
-    console.log(測試)
+export const login = (login: any) => {
+    console.log(login)
 }

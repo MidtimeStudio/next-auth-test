@@ -14,42 +14,44 @@ import * as z from "zod";
 import { zodResolver } from 'mantine-form-zod-resolver';
 import { FormError } from "@/components/form_error"
 import { FormSuccess } from "@/components/form_success"
-import { login } from "@/actions/login"
+import { register } from "@/actions/register"
 import { useState, useTransition } from "react"
 
-export const LoginForm = () => {
-  const [loginError, setLoginError] = useState<string | undefined>(undefined);
-  const [loginSuccess, setLoginSuccess] = useState<string | undefined>(undefined);
+export const RegisterForm = () => {
+  const [registerError, setRegisterError] = useState<string | undefined>(undefined);
+  const [registerSuccess, setRegisterSuccess] = useState<string | undefined>(undefined);
   const [isPending, startTransition] = useTransition()
-  const handleLogin = async (values: any) => {
+  const handleRegister = async (values: any) => {
     try {
       // Perform your login logic here
       // Example: const loginResult = await login(values);
       // Assuming login function returns a success message on successful login
 //
       // Simulating login success
-      setLoginSuccess('Email sent!');
-      setLoginError(undefined); // Set to undefined instead of null
+      setRegisterSuccess('Signup successful!');
+      setRegisterError(undefined); // Set to undefined instead of null
     } catch (error) {
       // Handle login error
       // Example: setLoginError('Invalid credentials');
-      setLoginError('Invalid credentials');
-      setLoginSuccess(undefined); // Set to undefined instead of null
+      setRegisterError('Check your form and try again!');
+      setRegisterSuccess(undefined); // Set to undefined instead of null
     } finally {
       // End transition regardless of success or error
       startTransition(() => {
-        login(values)
+        register(values)
       });
     }
   };
   const schema = z.object({
+    name: z.string().min(1, { message: 'Name is required!' }),
     email: z.string().email({ message: 'Email is required!' }),
-    password: z.string().min(1, { message: 'Password is required!' })
+    password: z.string().min(6, { message: 'Minimum 6 characters required!' })
   })
   //const [visible, { toggle }] = useDisclosure(false);
   const icon = <IconLock style={{ width: rem(18), height: rem(18) }} stroke={1.5} />
   const form = useForm({
     initialValues: {
+      name: '',
       email: '',
       //termsOfService: false,
       password: ''
@@ -68,12 +70,13 @@ export const LoginForm = () => {
   return (
     <div >
       <MantineProvider>
-        <CardWrapper headerLabel="Welcome to the page!" backButtonLabel="Don't have an account?" backButtonHref="/auth/register" showSocial>
-          <form onSubmit={form.onSubmit(handleLogin)}>
-            <TextInput disabled={isPending} label='Email' placeholder="Type your email" withAsterisk leftSection={<IconAt size={16} />} {...form.getInputProps('email')} radius='md' />
+        <CardWrapper headerLabel="Welcome to the page!" backButtonLabel="Already have an account?" backButtonHref="/auth/login" showSocial>
+          <form onSubmit={form.onSubmit(handleRegister)}>
+            <TextInput label='Name' placeholder='Type your name' radius='md' disabled={isPending} mt='sm' withAsterisk {...form.getInputProps('name')}/>
+            <TextInput disabled={isPending} mt='sm' label='Email' placeholder="Type your email" withAsterisk leftSection={<IconAt size={16} />} {...form.getInputProps('email')} radius='md' />
             <PasswordInput disabled={isPending} mt='sm' label="Password" radius='md' withAsterisk placeholder='Type your password' leftSection={icon} {...form.getInputProps('password')} />
-            <FormError message={loginError}/>
-            <FormSuccess message={loginSuccess}/>
+            <FormError message={registerError}/>
+            <FormSuccess message={registerSuccess}/>
             <Button disabled={isPending} variant="light" mt='md' type="submit" fullWidth>Submit</Button>
           </form>
         </CardWrapper>
@@ -82,6 +85,4 @@ export const LoginForm = () => {
   )
 }
 
-export default LoginForm
-  
-  
+export default RegisterForm
