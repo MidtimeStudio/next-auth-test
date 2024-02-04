@@ -23,24 +23,18 @@ export const RegisterForm = () => {
   const [isPending, startTransition] = useTransition()
   const handleRegister = async (values: any) => {
     try {
-      // Perform your login logic here
-      // Example: const loginResult = await login(values);
-      // Assuming login function returns a success message on successful login
-//
-      // Simulating login success
+      await register(values);
       setRegisterSuccess('Signup successful!');
-      setRegisterError(undefined); // Set to undefined instead of null
+      setRegisterError(undefined);
     } catch (error) {
-      // Handle login error
-      // Example: setLoginError('Invalid credentials');
-      setRegisterError('Check your form and try again!');
-      setRegisterSuccess(undefined); // Set to undefined instead of null
-    } finally {
-      // End transition regardless of success or error
-      startTransition(() => {
-        register(values)
-      });
-    }
+      if (error instanceof Error) {
+        if (error.message === 'Email is already in use') {
+        //Handle the specific error message here
+          setRegisterError('This email is already registered!');
+        }
+          setRegisterSuccess(undefined);
+        }
+      }
   };
   const schema = z.object({
     name: z.string().min(1, { message: 'Name is required!' }),
