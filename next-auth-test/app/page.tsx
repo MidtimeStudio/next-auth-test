@@ -14,7 +14,7 @@ export default function Home() {
     },
     //
   });
-  console.log('ai which has 3IQ still better than Johnny')
+  //console.log('ai which has 3IQ still better than Johnny')
   return (
     <MantineProvider theme={theme}>
       <main className="flex h-full flex-col items-center justify-center bg-slate-300">

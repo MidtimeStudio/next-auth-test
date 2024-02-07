@@ -27,12 +27,14 @@ export const RegisterForm = () => {
       setRegisterSuccess('Signup successful!');
       setRegisterError(undefined);
     } catch (error) {
-      if (error instanceof Error) {
-        if (error.message === 'Email is already in use') {
+      if (error instanceof Error && error.message.includes('Email is already in use')) {
+        //if (error.message === 'Email is already in use') {
         //Handle the specific error message here
-          setRegisterError('This email is already registered!');
-        }
-          setRegisterSuccess(undefined);
+          //setRegisterError('This email is already registered!');
+        //}
+          //setRegisterSuccess(undefined);
+          setRegisterError('This email has already registered!')
+          setRegisterSuccess(undefined)
         }
       }
   };

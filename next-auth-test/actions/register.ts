@@ -16,7 +16,9 @@ export const register = async (userData: any) => {
     });
 
     if (existingUser) {
-      throw new Error('Email is already in use');
+      throw (
+        Error('Email is already in use')
+      )
     }
 
     const salt = bcrypt.genSaltSync(saltRounds);
@@ -32,7 +34,7 @@ export const register = async (userData: any) => {
 
     console.log('User registered:', user);
   } catch (error: any) {
-    //console.error('Error registering user:', error.message);
+    console.error('Error registering user:', error.message);
     throw error; // Rethrow the error for handling at a higher level
   } finally {
     await prisma.$disconnect(); // Close the Prisma client connection
