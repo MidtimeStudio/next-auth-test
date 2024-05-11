@@ -35,7 +35,7 @@ export default function RegisterForm () {
         })
     }
      return (
-         <CardWrapper headerLabel="create ur account bitch!" backButtonHref="/auth/login" backButtonLabel="u have ur account than just now clicked me for wat????" showSocial>
+         <CardWrapper headerLabel="create ur account bitch!" backButtonHref="/auth/login" backButtonLabel="GO FUCK URSELF!!!!!!!!!!!!!" showSocial>
              <Form {...form}>
                  <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
                     <div className="space-y-4">
