@@ -4,7 +4,7 @@ import { authRoutes, apiAuthPrefix, DEFAULT_LOGIN_REDIRECT, publicRoutes } from 
 
 const { auth } = NextAuth(authConfig);
 
-export default auth((req) => {
+export default auth ((req) => {
     const { nextUrl } = req;
     const isLoggedIn = !!req.auth;
     const isApiAuthRoute = nextUrl.pathname.startsWith(apiAuthPrefix);
